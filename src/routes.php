@@ -11,7 +11,7 @@ $app->get('/calculator', function ($request, $response, $args) {
 $app->get('/jita-buy', function ($request, $response, $args) {
     $db = TT\Database::getDb();
 
-    $sql = 'SELECT i.typeName AS typename, j.best AS value FROM vjitabestbuy j JOIN invType i ON i.typeId=j.typeId';
+    $sql = 'SELECT i.typeName AS typename, j.best AS value FROM vjitabestbuy j JOIN invtype i ON i.typeId=j.typeId';
     $stmt = $db->prepare($sql);
     $stmt->execute();
 
