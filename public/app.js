@@ -120,7 +120,7 @@ $(document).ready(function() {
 		}
 
 		var grandTotal_100 = roundUpThousand(variableTotal + fixedTotal);
-		var grandTotalPrime = roundUpThousand(0.95 * variableTotal + fixedTotal);
+		var grandTotalPrime = roundUpThousand(0.92 * variableTotal + fixedTotal);
 		var grandTotalSub = roundUpThousand(0.90 * variableTotal + fixedTotal);
 
 		$('#appraisal-estimate-prime').html("&#x01B6; " + formatIsk(grandTotalPrime));
