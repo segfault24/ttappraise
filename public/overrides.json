@@ -1,0 +1,41 @@
+{
+    "_comment1": "fixed buy values, not affected by buyback rate",
+    "fixed": [
+        { "typename":"23rd Tier Overseer's Personal Effects", "value":123000000 },
+        { "typename":"22nd Tier Overseer's Personal Effects", "value":94000000 },
+        { "typename":"21st Tier Overseer's Personal Effects", "value":74000000 },
+        { "typename":"20th Tier Overseer's Personal Effects", "value":56000000 },
+        { "typename":"19th Tier Overseer's Personal Effects", "value":47000000 },
+        { "typename":"Triglavian Survey Database", "value":92000 },
+        { "typename":"Ancient Coordinates Database", "value":1380000 },
+        { "typename":"Neural Network Analyzer", "value":184000 },
+        { "typename":"Sleeper Data Library", "value":460000 },
+        { "typename":"Sleeper Drone AI Nexus", "value":4600000 },
+        { "typename":"10K Bounty SCC Encrypted Bond", "value":9200 },
+        { "typename":"100K Bounty SCC Encrypted Bond", "value":92000 },
+        { "typename":"1M Bounty SCC Encrypted Bond", "value":920000 },
+        { "typename":"10M Bounty SCC Encrypted Bond", "value":9200000 },
+        { "typename":"Covert Research Tools", "value":460000 }
+    ],
+    "_comment2": "override specific buy values with NPC prices, or zero for unprofitable ones",
+    "buy": [
+        { "typename":"1st Tier Overseer's Personal Effects", "value":0 },
+        { "typename":"2nd Tier Overseer's Personal Effects", "value":0 },
+        { "typename":"3rd Tier Overseer's Personal Effects", "value":0 },
+        { "typename":"4th Tier Overseer's Personal Effects", "value":0 },
+        { "typename":"5th Tier Overseer's Personal Effects", "value":0 },
+        { "typename":"6th Tier Overseer's Personal Effects", "value":360000 },
+        { "typename":"7th Tier Overseer's Personal Effects", "value":600000 },
+        { "typename":"8th Tier Overseer's Personal Effects", "value":1200000 },
+        { "typename":"9th Tier Overseer's Personal Effects", "value":2100000 },
+        { "typename":"10th Tier Overseer's Personal Effects", "value":3360000 },
+        { "typename":"11th Tier Overseer's Personal Effects", "value":6300000 },
+        { "typename":"12th Tier Overseer's Personal Effects", "value":9900000 },
+        { "typename":"13th Tier Overseer's Personal Effects", "value":13200000 },
+        { "typename":"14th Tier Overseer's Personal Effects", "value":17160000 },
+        { "typename":"15th Tier Overseer's Personal Effects", "value":21840000 },
+        { "typename":"16th Tier Overseer's Personal Effects", "value":29120000 },
+        { "typename":"17th Tier Overseer's Personal Effects", "value":35700000 },
+        { "typename":"18th Tier Overseer's Personal Effects", "value":43200000 }
+    ]
+}
