@@ -1,11 +1,19 @@
 <?php
 
 $app->get('/', function ($request, $response, $args) {
-    return $this->renderer->render($response, 'about.phtml', $args);
+    return $this->renderer->render($response, 'calculator.phtml', $args);
 });
 
-$app->get('/calculator', function ($request, $response, $args) {
-    return $this->renderer->render($response, 'calculator.phtml', $args);
+$app->get('/rates', function ($request, $response, $args) {
+    return $this->renderer->render($response, 'rates.phtml', $args);
+});
+
+$app->get('/faq', function ($request, $response, $args) {
+    return $this->renderer->render($response, 'faq.phtml', $args);
+});
+
+$app->get('/contact', function ($request, $response, $args) {
+    return $this->renderer->render($response, 'contact.phtml', $args);
 });
 
 $app->get('/jita-buy', function ($request, $response, $args) {

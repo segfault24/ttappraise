@@ -73,6 +73,12 @@ $(document).ready(function() {
 			var found = false;
 			var fitem = null;
 
+			if (line.typename.includes("Blueprint") || line.typename.includes("blueprint")) {
+				console.error("Not accepted: \"" + line.typename + "\"");
+				errors.push("Not accepted: \"" + line.typename + "\"");
+				continue;
+			}
+
 			// see if there is a fixed value override
 			found = false;
 			fitem = null;
@@ -117,8 +123,8 @@ $(document).ready(function() {
 				if (found) {
 					extval = line.quantity * fitem.value;
 				} else {
-					console.error("Failed to price \"" + line.typename + "\"");
-					errors.push("Failed to price \"" + line.typename + "\"");
+					console.error("Failed to price: \"" + line.typename + "\"");
+					errors.push("Failed to price: \"" + line.typename + "\"");
 					continue;
 				}
 			}
@@ -154,8 +160,8 @@ $(document).ready(function() {
 				}
 			}
 			if (found) {
-				console.warn("\"" + fitem.typename + "\" is not accepted");
-				errors.push("\"" + fitem.typename + "\" is not accepted");
+				console.warn("Not accepted: \"" + fitem.typename + "\"");
+				errors.push("Not accepted: \"" + fitem.typename + "\"");
 			}
 		}
 
