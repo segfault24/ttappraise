@@ -85,8 +85,8 @@ $(document).ready(function() {
 				}
 			}
 			if (found) {
-				primeTotal += line.quantity * parseFloat(item.value);
-				secondaryTotal += line.quantity * parseFloat(item.value);
+				primeTotal += line.quantity * parseFloat(fitem.value);
+				secondaryTotal += line.quantity * parseFloat(fitem.value);
 				found = true;
 				continue; // skip checking for anything else
 			}
