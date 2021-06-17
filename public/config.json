@@ -50,7 +50,8 @@
     { "groupname":"datacores", "groupid":333, "primerate":0.94, "secondaryrate":0.92 },
     { "groupname":"decryptors", "groupid":1304, "primerate":0.94, "secondaryrate":0.92 },
     { "groupname":"implants", "groupid":300, "primerate":0.94, "secondaryrate":0.92 },
-    { "groupname":"mindlinks", "groupid":744, "primerate":0.94, "secondaryrate":0.92 }
+    { "groupname":"mindlinks", "groupid":744, "primerate":0.94, "secondaryrate":0.92 },
+    { "groupname":"skins", "groupid":1950, "primerate":0.94, "secondaryrate":0.92 }
   ],
   "_comment4": "items in these groups will produce a warning",
   "warngroups": [
