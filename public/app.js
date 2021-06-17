@@ -34,7 +34,7 @@ $(document).ready(function() {
 	}
 
 	var market = null;
-	var overrides = null;
+	var config = null;
 
 	$('#pastearea').attr("disabled", true);
 	$('#appraise').attr("disabled", true);
@@ -42,16 +42,16 @@ $(document).ready(function() {
 
 	$.getJSON('/jita-buy', function(result) {
 		market = result;
-		if (!market || !overrides) {
+		if (!config || !market) {
 			$('#paste-area').val('');
 			$("#paste-area").attr("disabled", false);
 			$("#appraise").attr("disabled", false);
 		}
 	});
 
-	$.getJSON('/overrides.json', function(result) {
-		overrides = result;
-		if (!market || !overrides) {
+	$.getJSON('/config.json', function(result) {
+		config = result;
+		if (!config || !market) {
 			$('#paste-area').val('');
 			$("#paste-area").attr("disabled", false);
 			$("#appraise").attr("disabled", false);
@@ -64,73 +64,111 @@ $(document).ready(function() {
 
 		var errors = [];
 
-		// tally fixed value items separately
-		var variableTotal = 0;
-		var fixedTotal = 0;
+		var primeTotal = 0;
+		var secondaryTotal = 0;
 
 		var items = parseText($('#paste-area').val(), errors);
-		console.log(items.length);
+		//console.log(items.length);
 		for (let line of items) {
-			var typename = line.typename;
-			var qt = line.quantity;
 			var found = false;
+			var fitem = null;
 
 			// see if there is a fixed value override
-			for (let item of overrides.fixed) {
-				if (item.typename === typename) {
-					//console.log(item.typename + " (" + qt + ") [" + item.value + "]");
-					fixedTotal += qt * parseFloat(item.value);
-					found = true;
-					break;
-				}
-			}
-			if (found) {
-				// fixed value items are tallied in the loop
-				// skip checking for anything else
-				continue;
-			}
-			
-			var fitem = null;
-			// see if there is a buy value override
-			for (let item of overrides.buy) {
-				if (item.typename === typename) {
+			found = false;
+			fitem = null;
+			for (let item of config.fixed) {
+				if (item.typename === line.typename) {
+					console.log("fixed " + item.typename + " (" + line.quantity + ") [" + item.value + "]");
 					fitem = item;
 					found = true;
 					break;
 				}
 			}
-			// otherwise locate the item in the market price list
-			if (!found) {
+			if (found) {
+				primeTotal += line.quantity * parseFloat(item.value);
+				secondaryTotal += line.quantity * parseFloat(item.value);
+				found = true;
+				continue; // skip checking for anything else
+			}
+
+			// try to value the item
+			// see if there is an npc buy value override
+			found = false;
+			fitem = null;
+			for (let item of config.npcbuy) {
+				if (item.typename === line.typename) {
+					fitem = item;
+					found = true;
+					break;
+				}
+			}
+			var extval = 0;
+			if (found) {
+				extval = line.quantity * fitem.value;
+			} else {
+				// otherwise locate the item in the market price list
 				for (let item of market) {
-					if (item.typename === typename) {
+					if (item.typename === line.typename) {
 						fitem = item;
 						found = true;
 						break;
 					}
 				}
+				if (found) {
+					extval = line.quantity * fitem.value;
+				} else {
+					console.error("Failed to price \"" + line.typename + "\"");
+					errors.push("Failed to price \"" + line.typename + "\"");
+					continue;
+				}
+			}
+			// note: fitem will not be null here
+
+			// now apply specific group rates or default to buyback rate
+			found = false;
+			var fgroup = null;
+			for (let group of config.grouprate) {
+				if (fitem.groupid == group.groupid) {
+					found = true;
+					fgroup = group;
+					break;
+				}
+			}
+			if (found) {
+				// use the group rates
+				console.log("group " + fitem.typename + " (" + line.quantity + ") [" + fitem.value + "]");
+				primeTotal += fgroup.primerate * extval;
+				secondaryTotal += fgroup.secondaryrate * extval;
+			} else {
+				// default to the catch-all buyback rates
+				console.log("market " + fitem.typename + " (" + line.quantity + ") [" + fitem.value + "]");
+				primeTotal += config.primerate * extval;
+				secondaryTotal += config.secondaryrate * extval;
 			}
 
+			found = false;
+			for (let group of config.warngroups) {
+				if (fitem.groupid == group.groupid) {
+					found = true;
+					break;
+				}
+			}
 			if (found) {
-				//console.log(fitem.typename + " (" + qt + ") [" + fitem.value + "]");
-				variableTotal += qt * parseFloat(fitem.value);
-			} else {
-				errors.push("Failed to price \"" + typename + "\"");
-				//console.error("Failed to price \"" + typename + "\"");
+				console.warn("\"" + fitem.typename + "\" is not accepted");
+				errors.push("\"" + fitem.typename + "\" is not accepted");
 			}
 		}
 
-		var grandTotal_100 = roundUpThousand(variableTotal + fixedTotal);
-		var grandTotalPrime = roundUpThousand(0.92 * variableTotal + fixedTotal);
-		var grandTotalSub = roundUpThousand(0.90 * variableTotal + fixedTotal);
+		primeTotal = roundUpThousand(primeTotal);
+		secondaryTotal = roundUpThousand(secondaryTotal);
 
-		$('#appraisal-estimate-prime').html("&#x01B6; " + formatIsk(grandTotalPrime));
-		$('#appraisal-estimate-sub').html("&#x01B6; " + formatIsk(grandTotalSub));
+		$('#appraisal-estimate-prime').html("&#x01B6; " + formatIsk(primeTotal));
+		$('#appraisal-estimate-sub').html("&#x01B6; " + formatIsk(secondaryTotal));
 
 		if (errors.length != 0) {
-			$('#modal-title').text("Parse Error(s)");
-			$('#modal-text').text("Failed to parse one or more lines");
+			$('#modal-title').text("Warning");
+			$('#modal-text').text(errors.join("\n"));
 			$('#warning-modal').modal('show');
-			
 			console.error(errors);
 		}
 
