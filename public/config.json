@@ -43,6 +43,7 @@
   ],
   "_comment3": "items in these groups will have a different buyback rate",
   "grouprate": [
+    { "groupname":"overseer effects", "groupid":493, "primerate":0.92, "secondaryrate":0.90 },
     { "groupname":"red loot", "groupid":1995, "primerate":0.92, "secondaryrate":0.90 },
     { "groupname":"blue loot", "groupid":880, "primerate":0.92, "secondaryrate":0.90 },
     { "groupname":"scc bonds tags", "groupid":1248, "primerate":0.92, "secondaryrate":0.90 },
@@ -117,6 +118,7 @@
     { "groupname":"r16", "groupid":1921 },
     { "groupname":"r32", "groupid":1922 },
     { "groupname":"r64", "groupid":1923 },
+    { "groupname":"moon goo", "groupid":427 },
     { "groupname":"ice", "groupid":465 },
     { "groupname":"gas", "groupid":711 },
     { "groupname":"minerals", "groupid":18 },
