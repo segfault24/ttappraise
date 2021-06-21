@@ -33,6 +33,18 @@ $(document).ready(function() {
 		return ret;
 	}
 
+	function updateForNpcBuys(config, market) {
+		for (let item of market) {
+			for (let npc of config.npcbuy) {
+				if (item.typename === npc.typename) {
+					//console.log("config npc override " + item.typename + " [" + item.value + "->" + npc.value + "]");
+					item.value = npc.value;
+					break;
+				}
+			}
+		}
+	}
+
 	var market = null;
 	var config = null;
 
@@ -42,7 +54,8 @@ $(document).ready(function() {
 
 	$.getJSON('/jita-buy', function(result) {
 		market = result;
-		if (!config || !market) {
+		if (config && market) {
+			updateForNpcBuys(config, market);
 			$('#paste-area').val('');
 			$("#paste-area").attr("disabled", false);
 			$("#appraise").attr("disabled", false);
@@ -51,7 +64,8 @@ $(document).ready(function() {
 
 	$.getJSON('/config.json', function(result) {
 		config = result;
-		if (!config || !market) {
+		if (config && market) {
+			updateForNpcBuys(config, market);
 			$('#paste-area').val('');
 			$("#paste-area").attr("disabled", false);
 			$("#appraise").attr("disabled", false);
@@ -98,42 +112,29 @@ $(document).ready(function() {
 			}
 
 			// try to value the item
-			// see if there is an npc buy value override
+			// locate the item in the market price list
 			found = false;
 			fitem = null;
-			for (let item of config.npcbuy) {
+			for (let item of market) {
 				if (item.typename === line.typename) {
 					fitem = item;
 					found = true;
 					break;
 				}
 			}
-			var extval = 0;
-			if (found) {
-				extval = line.quantity * fitem.value;
-			} else {
-				// otherwise locate the item in the market price list
-				for (let item of market) {
-					if (item.typename === line.typename) {
-						fitem = item;
-						found = true;
-						break;
-					}
-				}
-				if (found) {
-					extval = line.quantity * fitem.value;
-				} else {
-					console.error("Failed to price: \"" + line.typename + "\"");
-					errors.push("Failed to price: \"" + line.typename + "\"");
-					continue;
-				}
+			if (!found) {
+				console.error("Failed to price: \"" + line.typename + "\"");
+				errors.push("Failed to price: \"" + line.typename + "\"");
+				continue;
 			}
+			var extval = line.quantity * fitem.value;
 			// note: fitem will not be null here
 
 			// now apply specific group rates or default to buyback rate
 			found = false;
 			var fgroup = null;
 			for (let group of config.grouprate) {
+				//console.debug(group.groupid + " " + fitem.groupid);
 				if (fitem.groupid == group.groupid) {
 					found = true;
 					fgroup = group;
@@ -142,12 +143,12 @@ $(document).ready(function() {
 			}
 			if (found) {
 				// use the group rates
-				console.log("group " + fitem.typename + " (" + line.quantity + ") [" + fitem.value + "]");
+				console.log("group " + fitem.typename + " (" + line.quantity + ") [" + fitem.value + "] {" + fgroup.primerate + "/" + fgroup.secondaryrate + "}");
 				primeTotal += fgroup.primerate * extval;
 				secondaryTotal += fgroup.secondaryrate * extval;
 			} else {
 				// default to the catch-all buyback rates
-				console.log("market " + fitem.typename + " (" + line.quantity + ") [" + fitem.value + "]");
+				console.log("market " + fitem.typename + " (" + line.quantity + ") [" + fitem.value + "] {" + config.primerate + "/" + config.secondaryrate + "}");
 				primeTotal += config.primerate * extval;
 				secondaryTotal += config.secondaryrate * extval;
 			}
@@ -175,7 +176,6 @@ $(document).ready(function() {
 			$('#modal-title').text("Warning");
 			$('#modal-text').text(errors.join("\n"));
 			$('#warning-modal').modal('show');
-			console.error(errors);
 		}
 
 		$('#paste-area').attr("disabled", false);
