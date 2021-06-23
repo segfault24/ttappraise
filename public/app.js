@@ -23,8 +23,9 @@ $(document).ready(function() {
 			if (line) {
 				var parts = line.trim().split("\t");
 				var typename = parts[0].trim();
-				var qt = parseInt(parts[1]);
+				var qt = parseInt(parts[1].replace(/,/g, ''));
 				if (isNaN(qt)) {
+					console.warn("defaulted to qt:1 for " + typename);
 					qt = 1;
 				}
 				ret.push({"typename":typename,"quantity":qt});
