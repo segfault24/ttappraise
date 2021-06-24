@@ -23,8 +23,11 @@ $(document).ready(function() {
 			if (line) {
 				var parts = line.trim().split("\t");
 				var typename = parts[0].trim();
-				var qt = parseInt(parts[1].replace(/,/g, ''));
-				if (isNaN(qt)) {
+				var qt = 0;
+				if (parts.length >= 2) {
+					qt = parseInt(parts[1].replace(/,/g, ''));
+				}
+				if (qt == 0 || isNaN(qt)) {
 					console.warn("defaulted to qt:1 for " + typename);
 					qt = 1;
 				}
