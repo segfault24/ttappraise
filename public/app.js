@@ -186,4 +186,8 @@ $(document).ready(function() {
 		$('#appraise').attr("disabled", false);
 	});
 
+	$("#paste-area").click(function () {
+		$(this).select();
+	});
+
 });
