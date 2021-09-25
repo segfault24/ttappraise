@@ -109,6 +109,9 @@
     { "groupname":"exhumer", "groupid":543 },
     { "groupname":"indy command", "groupid":941 },
     { "groupname":"cap indy", "groupid":883 },
+    { "groupname":"light fighters", "groupid":1652 },
+    { "groupname":"heavy fighters", "groupid":1653 },
+    { "groupname":"support fighters", "groupid":1537 },
     { "groupname":"arkonor", "groupid":450 },
     { "groupname":"bezdnacine", "groupid":4031 },
     { "groupname":"bistot", "groupid":451 },
@@ -142,6 +145,12 @@
     { "groupname":"p1", "groupid":1042 },
     { "groupname":"p2", "groupid":1034 },
     { "groupname":"p3", "groupid":1040 },
-    { "groupname":"p4", "groupid":1041 }
+    { "groupname":"p4", "groupid":1041 },
+    { "groupname":"citadels", "groupid": 1657},
+    { "groupname":"engr complex", "groupid": 1404},
+    { "groupname":"refineries", "groupid": 1406},
+    { "groupname":"ansiblex", "groupid": 1408},
+    { "groupname":"pharolux", "groupid": 2017},
+    { "groupname":"tenebrex", "groupid": 2016}
   ]
 }
