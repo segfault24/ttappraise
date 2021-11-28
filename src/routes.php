@@ -8,6 +8,10 @@ $app->get('/rates', function ($request, $response, $args) {
     return $this->renderer->render($response, 'rates.phtml', $args);
 });
 
+$app->get('/howto', function ($request, $response, $args) {
+    return $this->renderer->render($response, 'howto.phtml', $args);
+});
+
 $app->get('/faq', function ($request, $response, $args) {
     return $this->renderer->render($response, 'faq.phtml', $args);
 });
