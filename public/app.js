@@ -151,22 +151,27 @@ $(document).ready(function() {
 				primeTotal += fgroup.primerate * extval;
 				secondaryTotal += fgroup.secondaryrate * extval;
 			} else {
-				// default to the catch-all buyback rates
-				console.log("market " + fitem.typename + " (" + line.quantity + ") [" + fitem.value + "] {" + config.primerate + "/" + config.secondaryrate + "}");
-				primeTotal += config.primerate * extval;
-				secondaryTotal += config.secondaryrate * extval;
-			}
-
-			found = false;
-			for (let group of config.warngroups) {
-				if (fitem.groupid == group.groupid) {
-					found = true;
-					break;
+				// check if not acceptable
+				var acceptable = true;
+				for (let group of config.warngroups) {
+					if (fitem.groupid == group.groupid) {
+						acceptable = false;
+						break;
+					}
 				}
-			}
-			if (found) {
-				console.warn("Not accepted: \"" + fitem.typename + "\"");
-				errors.push("Not accepted: \"" + fitem.typename + "\"");
+				if (acceptable) {
+					// default to the catch-all buyback rates
+					console.log("market " + fitem.typename + " (" + line.quantity + ") [" + fitem.value + "] {" + config.primerate + "/" + config.secondaryrate + "}");
+					primeTotal += config.primerate * extval;
+					secondaryTotal += config.secondaryrate * extval;
+				} else {
+					console.warn("Not accepted: \"" + fitem.typename + "\"");
+					errors.push("Not accepted: \"" + fitem.typename + "\"");
+					// default to the catch-all buyback rates, reduced by another 20%
+					console.log("market " + fitem.typename + " (" + line.quantity + ") [" + fitem.value + "] {" + (config.primerate-0.2) + "/" + (config.secondaryrate-0.2) + "}");
+					primeTotal += (config.primerate-0.2) * extval;
+					secondaryTotal += (config.secondaryrate-0.2) * extval;
+				}
 			}
 		}
 
